@@ -1,0 +1,89 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "GCC Listing (RISC-V)",
+  "scopeName": "source.gcc-lst-riscv",
+  "fileTypes": [],
+  "patterns": [
+    { "include": "#header" },
+    { "include": "#section" },
+    { "include": "#annotation" },
+    { "include": "#label" },
+    { "include": "#asm-line" },
+    { "include": "#c-source" }
+  ],
+  "repository": {
+    "header": {
+      "comment": "File format header line",
+      "match": "^/.*\\bfile format\\b.*$",
+      "name": "comment.line.header.gcc-lst"
+    },
+    "section": {
+      "comment": "Disassembly of section .text:",
+      "match": "^(Disassembly of section )(\\S+)(:)$",
+      "captures": {
+        "1": { "name": "keyword.other.section.gcc-lst" },
+        "2": { "name": "entity.name.section.gcc-lst" },
+        "3": { "name": "punctuation.separator.gcc-lst" }
+      }
+    },
+    "annotation": {
+      "comment": "File/line annotation from objdump -l: /absolute/path/file.c:42",
+      "match": "^/[^\\s]+:\\d+$",
+      "name": "comment.line.annotation.gcc-lst"
+    },
+    "label": {
+      "comment": "Symbol label: 41000000 <Reset_Handler>:",
+      "match": "^([0-9a-f]{8}) (<[^>]+>)(:)$",
+      "captures": {
+        "1": { "name": "constant.numeric.address.gcc-lst" },
+        "2": { "name": "entity.name.function.gcc-lst" },
+        "3": { "name": "punctuation.separator.gcc-lst" }
+      }
+    },
+    "asm-line": {
+      "comment": "Assembly line at col 0: 41000000:\\t1151                \\taddi\\tsp,sp,-12",
+      "match": "^([0-9a-f]{5,8}):\\t([0-9a-f ]+)\\t([^\\t]+)(\\t.*)?$",
+      "captures": {
+        "1": { "name": "constant.numeric.address.gcc-lst" },
+        "2": { "name": "constant.numeric.hex.gcc-lst" },
+        "3": {
+          "patterns": [{ "include": "#mnemonic" }]
+        },
+        "4": {
+          "patterns": [
+            { "include": "#comment-hash" },
+            { "include": "#register-riscv" },
+            { "include": "#hex-literal" },
+            { "include": "#decimal-literal" }
+          ]
+        }
+      }
+    },
+    "c-source": {
+      "comment": "C source line — anything that doesn't match a known structural pattern",
+      "match": "^(?![0-9a-f]{5,8}:|Disassembly |/[^\\s]+:\\d+$|\\s*$).+$",
+      "name": "string.unquoted.source.gcc-lst"
+    },
+    "mnemonic": {
+      "comment": "RISC-V instruction mnemonics — longer patterns first to avoid prefix conflicts",
+      "match": "^(c\\.addi16sp|c\\.addi4spn|amoswap\\.w|amominu\\.w|amomaxu\\.w|amomin\\.w|amomax\\.w|amoadd\\.w|amoxor\\.w|amoand\\.w|amoor\\.w|mulhsu|mulhu|mulh|csrrwi|csrrsi|csrrci|csrwi|csrrw|csrrs|csrrc|csrw|csrr|c\\.addi|c\\.li|c\\.lui|c\\.mv|c\\.add|c\\.sub|c\\.xor|c\\.or|c\\.and|c\\.slli|c\\.srli|c\\.srai|c\\.andi|c\\.lwsp|c\\.swsp|c\\.jalr|c\\.beqz|c\\.bnez|c\\.ebreak|c\\.jal|c\\.jr|c\\.lw|c\\.sw|c\\.j|lr\\.w|sc\\.w|bltu|bgeu|sltiu|sltu|slli|srli|srai|auipc|jalr|fence|ecall|ebreak|mret|sret|divu|remu|wfi|lui|jal|beq|bne|blt|bge|lbu|lhu|addi|slti|xori|andi|ori|add|sub|sll|slt|xor|srl|sra|and|mul|div|rem|lw|lh|lb|sw|sh|sb|or|ret|li|beqz|bnez|j|jr)$",
+      "name": "keyword.control.mnemonic.gcc-lst"
+    },
+    "register-riscv": {
+      "match": "\\b(zero|ra|sp|gp|tp|t[0-6]|s[0-9]|s1[01]|a[0-7]|x(?:[0-9]|[12][0-9]|3[01]))\\b",
+      "name": "variable.language.register.gcc-lst"
+    },
+    "hex-literal": {
+      "match": "0x[0-9a-fA-F]+",
+      "name": "constant.numeric.hex-literal.gcc-lst"
+    },
+    "decimal-literal": {
+      "match": "-?\\b\\d+\\b",
+      "name": "constant.numeric.decimal.gcc-lst"
+    },
+    "comment-hash": {
+      "match": "#.*$",
+      "name": "comment.line.number-sign.gcc-lst"
+    }
+  }
+}
