@@ -1,0 +1,71 @@
+{
+  "name": "gcc-asm-list-files",
+  "displayName": "GCC ASM List File Viewer",
+  "description": "Syntax highlighting, hover docs, and go-to-definition for GCC objdump listing files (.lst)",
+  "version": "0.1.0",
+  "engines": { "vscode": "^1.85.0" },
+  "categories": ["Programming Languages"],
+  "activationEvents": ["onLanguage:gcc-lst"],
+  "main": "./out/extension",
+  "contributes": {
+    "languages": [
+      {
+        "id": "gcc-lst",
+        "aliases": ["GCC Listing"],
+        "extensions": [".lst"],
+        "configuration": "./language-configuration.json"
+      },
+      { "id": "gcc-lst-riscv", "aliases": ["GCC Listing (RISC-V)"] },
+      { "id": "gcc-lst-cm33",  "aliases": ["GCC Listing (CM33)"]   }
+    ],
+    "grammars": [
+      {
+        "language": "gcc-lst-riscv",
+        "scopeName": "source.gcc-lst-riscv",
+        "path": "./syntaxes/gcc-lst-riscv.tmLanguage.json"
+      },
+      {
+        "language": "gcc-lst-cm33",
+        "scopeName": "source.gcc-lst-cm33",
+        "path": "./syntaxes/gcc-lst-cm33.tmLanguage.json"
+      }
+    ],
+    "configuration": {
+      "title": "GCC Listing",
+      "properties": {
+        "gccLst.pathMappings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "from": { "type": "string", "description": "Path prefix as it appears in the .lst file (e.g. Docker container path)" },
+              "to":   { "type": "string", "description": "Replacement path prefix on this machine" }
+            },
+            "required": ["from", "to"],
+            "additionalProperties": false
+          },
+          "default": [],
+          "description": "Map paths in .lst files (e.g. Docker container paths) to host filesystem paths. Entries are tried in order; first match whose resolved path exists on disk is used."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile":       "tsc -p ./",
+    "watch":         "tsc -watch -p ./",
+    "test:grammar":  "vscode-tmgrammar-test -g ./syntaxes/gcc-lst-riscv.tmLanguage.json ./test/grammar/riscv.test.lst && vscode-tmgrammar-test -g ./syntaxes/gcc-lst-cm33.tmLanguage.json ./test/grammar/cm33.test.lst",
+    "test:unit":     "mocha --require ts-node/register 'test/unit/**/*.test.ts'",
+    "test":          "npm run compile && npm run test:grammar && npm run test:unit && node ./out/test/integration/runTests.js"
+  },
+  "devDependencies": {
+    "@types/mocha":           "^10.0.6",
+    "@types/node":            "^20.0.0",
+    "@types/vscode":          "^1.85.0",
+    "@vscode/test-electron":  "^2.3.8",
+    "glob":                   "^10.3.10",
+    "mocha":                  "^10.3.0",
+    "ts-node":                "^10.9.2",
+    "typescript":             "^5.3.3",
+    "vscode-tmgrammar-test":  "^0.1.2"
+  }
+}
