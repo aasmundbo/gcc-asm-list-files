@@ -1,0 +1,105 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "GCC Listing (CM33)",
+  "scopeName": "source.gcc-lst-cm33",
+  "fileTypes": [],
+  "patterns": [
+    { "include": "#header" },
+    { "include": "#section" },
+    { "include": "#annotation" },
+    { "include": "#label" },
+    { "include": "#asm-word" },
+    { "include": "#asm-line" },
+    { "include": "#c-source" }
+  ],
+  "repository": {
+    "header": {
+      "comment": "File format header: /path/file.elf:     file format elf32-littlearm",
+      "match": "^/.*\\bfile format\\b.*$",
+      "name": "comment.line.header.gcc-lst"
+    },
+    "section": {
+      "comment": "Disassembly of section .text:",
+      "match": "^(Disassembly of section )(\\S+)(:)$",
+      "captures": {
+        "1": { "name": "keyword.other.section.gcc-lst" },
+        "2": { "name": "entity.name.section.gcc-lst" },
+        "3": { "name": "punctuation.separator.gcc-lst" }
+      }
+    },
+    "annotation": {
+      "comment": "File/line annotation from objdump -l: /absolute/path/file.c:42",
+      "match": "^/[^\\s]+:\\d+$",
+      "name": "comment.line.annotation.gcc-lst"
+    },
+    "label": {
+      "comment": "Symbol label: 00005744 <Reset_Handler>:",
+      "match": "^([0-9a-f]{8}) (<[^>]+>)(:)$",
+      "captures": {
+        "1": { "name": "constant.numeric.address.gcc-lst" },
+        "2": { "name": "entity.name.function.gcc-lst" },
+        "3": { "name": "punctuation.separator.gcc-lst" }
+      }
+    },
+    "asm-word": {
+      "comment": ".word data directive (must come before asm-line):     5784:\\t200082c8 \\t.word\\t0x200082c8",
+      "begin": "^([ ]+[0-9a-f]+):\\t([0-9a-f ]+)\\t(\\.word)\\t",
+      "beginCaptures": {
+        "1": { "name": "constant.numeric.address.gcc-lst" },
+        "2": { "name": "constant.numeric.hex.gcc-lst" },
+        "3": { "name": "keyword.other.directive.gcc-lst" }
+      },
+      "end": "$",
+      "patterns": [
+        { "include": "#hex-literal" },
+        { "include": "#decimal-literal" }
+      ]
+    },
+    "asm-line": {
+      "comment": "Assembly line with leading spaces:     5744:\\tb508      \\tpush\\t{r3, lr}",
+      "begin": "^([ ]+[0-9a-f]+):\\t",
+      "beginCaptures": {
+        "1": { "name": "constant.numeric.address.gcc-lst" }
+      },
+      "end": "$",
+      "patterns": [
+        {
+          "comment": "Hex bytes immediately after the address tab — \\G anchors to start of body",
+          "match": "\\G([0-9a-f]{2,8}(?:[ ]+[0-9a-f]{2,8})*)[ \\t]+",
+          "captures": { "1": { "name": "constant.numeric.hex.gcc-lst" } }
+        },
+        { "include": "#mnemonic" },
+        { "include": "#comment-semicolon" },
+        { "include": "#register-cm33" },
+        { "include": "#hex-literal" },
+        { "include": "#decimal-literal" }
+      ]
+    },
+    "c-source": {
+      "comment": "C source line — anything not matching address/section/label/annotation",
+      "match": "^(?![ ]+[0-9a-f]+:|[0-9a-f]{8} |Disassembly |/[^\\s]+:\\d+$|\\s*$).+$",
+      "name": "string.unquoted.source.gcc-lst"
+    },
+    "mnemonic": {
+      "comment": "CM33/Thumb-2 instruction mnemonics — longer/dotted patterns first",
+      "match": "\\b(push\\.w|pop\\.w|ldr\\.w|ldrb\\.w|ldrh\\.w|str\\.w|strb\\.w|strh\\.w|add\\.w|sub\\.w|nop\\.w|b\\.w|b\\.n|ldmia|stmia|stmdb|ldrsb|ldrsh|umull|smull|itttt|movw|movt|movs|adds|subs|lsls|lsrs|asrs|rors|ands|orrs|eors|bics|mvns|rsbs|adcs|sbcs|cbz|cbnz|itee|itet|itte|ittt|ite|itt|it|bkpt|wfe|sev|dmb|dsb|isb|svc|wfi|bx|bl|blx|beq|bne|bcs|bcc|bmi|bpl|bvs|bvc|bhi|bls|bge|blt|bgt|ble|vmovs|vmovd|vmrs|vmsr|fmrx|fmxr|vcmpe|vcvtr|vsqrt|vadd|vsub|vmul|vdiv|vcmp|vcvt|vldr|vstr|vpush|vpop|vldm|vstm|vmov|vabs|vneg|udiv|sdiv|mla|mls|push|pop|mov|ldr|ldrb|ldrh|str|strb|strh|ldm|stm|add|sub|rsb|mul|and|orr|eor|bic|mvn|lsl|lsr|asr|ror|rrx|cmp|cmn|tst|teq|clz|rev|rev16|revsh|sxtb|sxth|uxtb|uxth|uxtab|sxtab|pld|msr|mrs|nop|b|adc|sbc)\\b",
+      "name": "keyword.control.mnemonic.gcc-lst"
+    },
+    "register-cm33": {
+      "match": "\\b(r(?:[0-9]|1[0-5])|sp|lr|pc|apsr|ipsr|epsr|xpsr|MSP|PSP|MSPLIM|PSPLIM|msp|psp|control|primask|basepri|faultmask|s(?:[0-9]|[12][0-9]|3[01])|d(?:[0-9]|1[0-5])|fpscr)\\b",
+      "name": "variable.language.register.gcc-lst"
+    },
+    "hex-literal": {
+      "match": "0x[0-9a-fA-F]+",
+      "name": "constant.numeric.hex-literal.gcc-lst"
+    },
+    "decimal-literal": {
+      "match": "-?\\b\\d+\\b",
+      "name": "constant.numeric.decimal.gcc-lst"
+    },
+    "comment-semicolon": {
+      "match": ";.*$",
+      "name": "comment.line.semicolon.gcc-lst"
+    }
+  }
+}

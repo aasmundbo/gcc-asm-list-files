@@ -1,0 +1,49 @@
+// SYNTAX TEST "source.gcc-lst-riscv"
+
+/project/example.elf:     file format elf32-littleriscv
+// <- comment.line.header.gcc-lst
+
+Disassembly of section .text:
+// ^ keyword.other.section.gcc-lst
+//                       ^ entity.name.section.gcc-lst
+
+41000000 <Reset_Handler>:
+// ^ constant.numeric.address.gcc-lst
+//         ^ entity.name.function.gcc-lst
+
+/home/user/project/src/main.c:42
+// <- comment.line.annotation.gcc-lst
+
+__RESET_HANDLER_ATTRIBUTE void Reset_Handler(void)
+// <- string.unquoted.source.gcc-lst
+
+41000000:	1151                	addi	sp,sp,-12
+// ^ constant.numeric.address.gcc-lst
+//           ^ constant.numeric.hex.gcc-lst
+//                             ^ keyword.control.mnemonic.gcc-lst
+//                                   ^ variable.language.register.gcc-lst
+
+41000004:	00004197          	auipc	gp,0x4
+//           ^ constant.numeric.hex.gcc-lst
+//                           ^ keyword.control.mnemonic.gcc-lst
+//                                  ^ variable.language.register.gcc-lst
+//                                     ^ constant.numeric.hex-literal.gcc-lst
+
+41000018:	410007b7          	lui	a5,0x41000
+//                           ^ keyword.control.mnemonic.gcc-lst
+
+41000020:	30779073          	csrw	0x307,a5
+//                           ^ keyword.control.mnemonic.gcc-lst
+
+41000034:	23a1                	jal	4100057c <SystemInit>
+//                             ^ keyword.control.mnemonic.gcc-lst
+
+41000050:	0785                	addi	a5,a5,1
+//                             ^ keyword.control.mnemonic.gcc-lst
+//                                   ^ variable.language.register.gcc-lst
+
+41000054:	fee7e6e3          	bltu	a5,a4,41000040 <Reset_Handler+0x40>
+//                           ^ keyword.control.mnemonic.gcc-lst
+
+410003b8:	8082                	ret
+//                             ^ keyword.control.mnemonic.gcc-lst

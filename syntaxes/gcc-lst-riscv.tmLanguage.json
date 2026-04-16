@@ -13,7 +13,7 @@
   ],
   "repository": {
     "header": {
-      "comment": "File format header line",
+      "comment": "File format header: /path/file.elf:     file format elf32-littleriscv",
       "match": "^/.*\\bfile format\\b.*$",
       "name": "comment.line.header.gcc-lst"
     },
@@ -42,31 +42,32 @@
     },
     "asm-line": {
       "comment": "Assembly line at col 0: 41000000:\\t1151                \\taddi\\tsp,sp,-12",
-      "match": "^([0-9a-f]{5,8}):\\t([0-9a-f ]+)\\t([^\\t]+)(\\t.*)?$",
-      "captures": {
-        "1": { "name": "constant.numeric.address.gcc-lst" },
-        "2": { "name": "constant.numeric.hex.gcc-lst" },
-        "3": {
-          "patterns": [{ "include": "#mnemonic" }]
+      "begin": "^([0-9a-f]{5,8}):\\t",
+      "beginCaptures": {
+        "1": { "name": "constant.numeric.address.gcc-lst" }
+      },
+      "end": "$",
+      "patterns": [
+        {
+          "comment": "Hex bytes immediately after the address tab — \\G anchors to start of body",
+          "match": "\\G([0-9a-f]{2,8}(?:[ ]+[0-9a-f]{2,8})*)[ \\t]+",
+          "captures": { "1": { "name": "constant.numeric.hex.gcc-lst" } }
         },
-        "4": {
-          "patterns": [
-            { "include": "#comment-hash" },
-            { "include": "#register-riscv" },
-            { "include": "#hex-literal" },
-            { "include": "#decimal-literal" }
-          ]
-        }
-      }
+        { "include": "#mnemonic" },
+        { "include": "#register-riscv" },
+        { "include": "#hex-literal" },
+        { "include": "#decimal-literal" },
+        { "include": "#comment-hash" }
+      ]
     },
     "c-source": {
-      "comment": "C source line — anything that doesn't match a known structural pattern",
+      "comment": "C source line — anything that doesn't start with an address or known keyword",
       "match": "^(?![0-9a-f]{5,8}:|Disassembly |/[^\\s]+:\\d+$|\\s*$).+$",
       "name": "string.unquoted.source.gcc-lst"
     },
     "mnemonic": {
-      "comment": "RISC-V instruction mnemonics — longer patterns first to avoid prefix conflicts",
-      "match": "^(c\\.addi16sp|c\\.addi4spn|amoswap\\.w|amominu\\.w|amomaxu\\.w|amomin\\.w|amomax\\.w|amoadd\\.w|amoxor\\.w|amoand\\.w|amoor\\.w|mulhsu|mulhu|mulh|csrrwi|csrrsi|csrrci|csrwi|csrrw|csrrs|csrrc|csrw|csrr|c\\.addi|c\\.li|c\\.lui|c\\.mv|c\\.add|c\\.sub|c\\.xor|c\\.or|c\\.and|c\\.slli|c\\.srli|c\\.srai|c\\.andi|c\\.lwsp|c\\.swsp|c\\.jalr|c\\.beqz|c\\.bnez|c\\.ebreak|c\\.jal|c\\.jr|c\\.lw|c\\.sw|c\\.j|lr\\.w|sc\\.w|bltu|bgeu|sltiu|sltu|slli|srli|srai|auipc|jalr|fence|ecall|ebreak|mret|sret|divu|remu|wfi|lui|jal|beq|bne|blt|bge|lbu|lhu|addi|slti|xori|andi|ori|add|sub|sll|slt|xor|srl|sra|and|mul|div|rem|lw|lh|lb|sw|sh|sb|or|ret|li|beqz|bnez|j|jr)$",
+      "comment": "RISC-V instruction mnemonics — longer/dotted patterns first",
+      "match": "\\b(c\\.addi16sp|c\\.addi4spn|amoswap\\.w|amominu\\.w|amomaxu\\.w|amomin\\.w|amomax\\.w|amoadd\\.w|amoxor\\.w|amoand\\.w|amoor\\.w|mulhsu|mulhu|mulh|csrrwi|csrrsi|csrrci|csrwi|csrrw|csrrs|csrrc|csrw|csrr|c\\.addi|c\\.li|c\\.lui|c\\.mv|c\\.add|c\\.sub|c\\.xor|c\\.or|c\\.and|c\\.slli|c\\.srli|c\\.srai|c\\.andi|c\\.lwsp|c\\.swsp|c\\.jalr|c\\.beqz|c\\.bnez|c\\.ebreak|c\\.jal|c\\.jr|c\\.lw|c\\.sw|c\\.j|lr\\.w|sc\\.w|bltu|bgeu|sltiu|sltu|slli|srli|srai|auipc|jalr|fence|ecall|ebreak|mret|sret|divu|remu|wfi|lui|jal|beq|bne|blt|bge|lbu|lhu|addi|slti|xori|andi|ori|add|sub|sll|slt|xor|srl|sra|and|mul|div|rem|lw|lh|lb|sw|sh|sb|or|ret|li|beqz|bnez|j|jr)\\b",
       "name": "keyword.control.mnemonic.gcc-lst"
     },
     "register-riscv": {

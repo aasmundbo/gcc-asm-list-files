@@ -1,0 +1,51 @@
+// SYNTAX TEST "source.gcc-lst-cm33"
+
+/project/example.elf:     file format elf32-littlearm
+// <- comment.line.header.gcc-lst
+
+Disassembly of section .text:
+// ^ keyword.other.section.gcc-lst
+//                       ^ entity.name.section.gcc-lst
+
+00005744 <Reset_Handler>:
+// ^ constant.numeric.address.gcc-lst
+//         ^ entity.name.function.gcc-lst
+
+/home/user/project/src/main.c:42
+// <- comment.line.annotation.gcc-lst
+
+__RESET_HANDLER_ATTRIBUTE void Reset_Handler(void)
+// <- string.unquoted.source.gcc-lst
+
+    5744:	b508      	push	{r3, lr}
+//  ^ constant.numeric.address.gcc-lst
+//          ^ constant.numeric.hex.gcc-lst
+//                     ^ keyword.control.mnemonic.gcc-lst
+//                          ^ variable.language.register.gcc-lst
+
+    5748:	f383 8809 	msr	PSP, r3
+//  ^ constant.numeric.address.gcc-lst
+//          ^ constant.numeric.hex.gcc-lst
+//                     ^ keyword.control.mnemonic.gcc-lst
+//                         ^ variable.language.register.gcc-lst
+
+    574c:	f5a3 4380 	sub.w	r3, r3, #16384	; 0x4000
+//                     ^ keyword.control.mnemonic.gcc-lst
+//                         ^ variable.language.register.gcc-lst
+//                                               ^ comment.line.semicolon.gcc-lst
+
+    5758:	f000 f954 	bl	5a04 <SystemInit>
+//                   ^ keyword.control.mnemonic.gcc-lst
+
+    5784:	200082c8 	.word	0x200082c8
+//                    ^ keyword.other.directive.gcc-lst
+//                          ^ constant.numeric.hex-literal.gcc-lst
+
+    576c:	3301      	adds	r3, #1
+//                     ^ keyword.control.mnemonic.gcc-lst
+//                        ^ variable.language.register.gcc-lst
+//                             ^ constant.numeric.decimal.gcc-lst
+
+    579c:	4718      	bx	r3
+//                   ^ keyword.control.mnemonic.gcc-lst
+//                      ^ variable.language.register.gcc-lst

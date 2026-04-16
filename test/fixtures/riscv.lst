@@ -1,0 +1,10 @@
+/project/example.elf:     file format elf32-littleriscv
+
+Disassembly of section .text:
+
+41000000 <Reset_Handler>:
+
+/home/user/project/src/main.c:42
+
+41000000:	1151                	addi	sp,sp,-12
+41000004:	00004197          	auipc	gp,0x4

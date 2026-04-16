@@ -1,0 +1,10 @@
+/project/example.elf:     file format elf32-littlearm
+
+Disassembly of section .text:
+
+00005744 <Reset_Handler>:
+
+/home/user/project/src/main.c:42
+
+    5744:	b508      	push	{r3, lr}
+    5748:	f383 8809 	msr	PSP, r3
