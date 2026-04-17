@@ -89,6 +89,7 @@
   "scripts": {
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
+    "lint": "eslint src",
     "test:grammar": "vscode-tmgrammar-test -g ./syntaxes/gcc-lst-riscv.tmLanguage.json ./test/grammar/riscv.test.lst && vscode-tmgrammar-test -g ./syntaxes/gcc-lst-cm33.tmLanguage.json ./test/grammar/cm33.test.lst",
     "test:unit": "mocha --require ts-node/register 'test/unit/**/*.test.ts'",
     "test": "npm run compile && npm run test:grammar && npm run test:unit && node ./out/test/integration/runTests.js"
@@ -97,7 +98,10 @@
     "@types/mocha": "^10.0.6",
     "@types/node": "^20.0.0",
     "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^8.58.2",
+    "@typescript-eslint/parser": "^8.58.2",
     "@vscode/test-electron": "^2.3.8",
+    "eslint": "^10.2.1",
     "glob": "^10.3.10",
     "mocha": "^11.7.5",
     "ts-node": "^10.9.2",

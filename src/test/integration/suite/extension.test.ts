@@ -26,7 +26,7 @@ suite('GCC Listing Extension', () => {
 
   test('hover provider returns description for RISC-V mnemonic', async () => {
     const uri = vscode.Uri.file(path.join(FIXTURES, 'riscv.lst'));
-    const doc = await vscode.workspace.openTextDocument(uri);
+    const _doc = await vscode.workspace.openTextDocument(uri);
     await new Promise(r => setTimeout(r, 500));
 
     // Line 4 (0-indexed): "41000000:	1151                	addi	sp,sp,-12"
