@@ -16,7 +16,7 @@ export class GccLstDefinitionProvider implements vscode.DefinitionProvider {
 
     const resolvedPath = resolveFilePath(result.filePath, mappings);
     const uri = vscode.Uri.file(resolvedPath);
-    const targetPosition = new vscode.Position(result.lineNumber - 1, 0);
-    return new vscode.Location(uri, targetPosition);
+    const targetLine = Math.max(0, result.lineNumber - 1);
+    return new vscode.Location(uri, new vscode.Position(targetLine, 0));
   }
 }

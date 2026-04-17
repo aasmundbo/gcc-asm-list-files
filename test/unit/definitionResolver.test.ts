@@ -88,4 +88,38 @@ describe('resolveFilePath', () => {
     ];
     assert.strictEqual(resolveFilePath('/project/main.c', mappings), '/project/main.c');
   });
+
+  it('normalises path traversal in rawPath', () => {
+    const mappings: PathMapping[] = [];
+    const result = resolveFilePath('/project/../etc/passwd', mappings);
+    assert.strictEqual(result, '/etc/passwd');
+  });
+
+  it('rejects candidate that escapes the to root', () => {
+    const mappings: PathMapping[] = [
+      { from: '/project', to: tmpDir },
+    ];
+    const result = resolveFilePath('/project/../etc/passwd', mappings);
+    assert.strictEqual(result, '/etc/passwd');
+  });
+});
+
+describe('findAnnotation with maxScanLines', () => {
+  const buildLines = (count: number): string[] => {
+    const lines = Array(count).fill('  code line');
+    lines[0] = '/foo/bar.c:10';
+    return lines;
+  };
+
+  it('returns null when annotation is beyond maxScanLines', () => {
+    const lines = buildLines(251);
+    const result = findAnnotation(lines, 250, 200);
+    assert.strictEqual(result, null);
+  });
+
+  it('finds annotation when maxScanLines is large enough', () => {
+    const lines = buildLines(251);
+    const result = findAnnotation(lines, 250, 300);
+    assert.deepStrictEqual(result, { filePath: '/foo/bar.c', lineNumber: 10 });
+  });
 });
