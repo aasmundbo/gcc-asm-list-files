@@ -11,7 +11,8 @@ export class GccLstHoverProvider implements vscode.HoverProvider {
     if (!range) { return null; }
     const word = document.getText(range);
     const arch = detectArch(document);
-    const text = lookupHoverText(word, arch);
+    const line = document.lineAt(position.line).text;
+    const text = lookupHoverText(word, arch, line);
     if (!text) { return null; }
     return new vscode.Hover(new vscode.MarkdownString(text), range);
   }
