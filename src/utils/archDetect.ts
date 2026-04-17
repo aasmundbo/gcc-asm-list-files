@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
+import { Arch } from '../types';
 
-export type Arch = 'riscv' | 'cm33' | 'unknown';
+export type { Arch };
 
 export function detectArchFromLines(lines: string[]): Arch {
   const limit = Math.min(lines.length, 5);

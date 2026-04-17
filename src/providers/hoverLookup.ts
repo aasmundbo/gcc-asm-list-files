@@ -1,6 +1,6 @@
-import { hoverData as riscvData, HoverEntry } from '../hoverData/riscv';
+import { hoverData as riscvData } from '../hoverData/riscv';
 import { hoverData as cm33Data } from '../hoverData/cm33';
-import { Arch } from '../utils/archDetect';
+import { Arch, HoverEntry } from '../types';
 import { parseOperands } from './operandParser';
 
 export function lookupHoverText(word: string, arch: Arch, line?: string): string | null {
