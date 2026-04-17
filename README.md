@@ -18,12 +18,14 @@ objdump -d -S -l firmware.elf > firmware.lst
 ## Architecture auto-detection
 
 Opening a `.lst` file automatically selects the correct grammar:
+
 - `elf32-littleriscv` header → `gcc-lst-riscv`
 - `elf32-littlearm` header → `gcc-lst-cm33`
 
 ## Path mappings
 
-When the listing was generated inside a Docker container or build VM, the source paths in the file won't exist on your local machine. Configure `gccLst.pathMappings` to rewrite them:
+When the listing was generated inside a Docker container or build VM, the source paths in the file won't exist on your
+local machine. Configure `gccLst.pathMappings` to rewrite them:
 
 ```json
 // .vscode/settings.json
@@ -35,4 +37,47 @@ When the listing was generated inside a Docker container or build VM, the source
 }
 ```
 
-Mappings are tried in order; the first one that produces a file that exists on disk is used. If no mapping matches (or no mapped file exists), the raw path from the listing is used as-is.
+Mappings are tried in order; the first one that produces a file that exists on disk is used. If no mapping matches (or
+no mapped file exists), the raw path from the listing is used as-is.
+
+## Development
+
+### Build
+
+```bash
+npm install
+npm run compile
+```
+
+### Try the extension (Extension Development Host)
+
+Add `.vscode/launch.json` to the repository root:
+
+```json
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run Extension",
+      "type": "extensionHost",
+      "request": "launch",
+      "args": ["--extensionDevelopmentPath=${workspaceFolder}"]
+    }
+  ]
+}
+```
+
+Press `F5` in VS Code. A new Extension Development Host window opens with
+the extension active. Recompile with `npm run compile` (or `npm run watch`)
+and reload the host window to pick up changes.
+
+### Install locally as .vsix
+
+```bash
+npm install
+npm run compile
+npx vsce package
+```
+
+In VS Code: `Ctrl+Shift+P` → __Extensions: Install from VSIX...__ → select
+the generated `.vsix` file.
