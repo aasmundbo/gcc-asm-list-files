@@ -1,6 +1,9 @@
 import * as vscode from 'vscode';
 import { detectArch } from '../utils/archDetect';
 import { lookupHoverText } from './hoverLookup';
+import { getCachedArch, setCachedArch } from './archCache';
+
+export { clearArchCacheFor, clearArchCache } from './archCache';
 
 export class GccLstHoverProvider implements vscode.HoverProvider {
   provideHover(
@@ -10,7 +13,14 @@ export class GccLstHoverProvider implements vscode.HoverProvider {
     const range = document.getWordRangeAtPosition(position, /[\w.]+/);
     if (!range) { return null; }
     const word = document.getText(range);
-    const arch = detectArch(document);
+
+    const key = document.uri.toString();
+    let arch = getCachedArch(key);
+    if (!arch) {
+      arch = detectArch(document);
+      setCachedArch(key, arch);
+    }
+
     const line = document.lineAt(position.line).text;
     const text = lookupHoverText(word, arch, line);
     if (!text) { return null; }

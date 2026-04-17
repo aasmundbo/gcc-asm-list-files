@@ -15,7 +15,9 @@
     "Programming Languages"
   ],
   "activationEvents": [
-    "onLanguage:gcc-lst"
+    "onLanguage:gcc-lst",
+    "onLanguage:gcc-lst-riscv",
+    "onLanguage:gcc-lst-cm33"
   ],
   "main": "./out/extension",
   "contributes": {
