@@ -1,4 +1,4 @@
-export type Arch = 'riscv' | 'cm33' | 'unknown';
+export type Arch = 'riscv' | 'cm0' | 'cm3' | 'cm4' | 'cm33' | 'unknown';
 export type HoverEntry = string | ((ops: string[]) => string);
 
 /** Safely get operand at index i, returning '?' if missing. */

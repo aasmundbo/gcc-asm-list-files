@@ -26,12 +26,75 @@ describe('lookupHoverText', () => {
     assert.strictEqual(lookupHoverText('addi', 'unknown'), null);
   });
 
-  it('does not cross-contaminate arches — push is CM33 only', () => {
+  it('does not cross-contaminate arches — push is ARM only', () => {
     assert.strictEqual(lookupHoverText('push', 'riscv'), null);
   });
 
   it('does not cross-contaminate arches — addi is RISC-V only', () => {
     assert.strictEqual(lookupHoverText('addi', 'cm33'), null);
+  });
+
+  // ── CM0 arch ─────────────────────────────────────────────────────────────────
+
+  it('CM0 returns hover for a CM0 instruction (push)', () => {
+    const result = lookupHoverText('push', 'cm0');
+    assert.ok(result !== null, 'expected non-null for push on cm0');
+    assert.ok(result!.includes('push'));
+  });
+
+  it('CM0 returns null for CM3-only instruction (sdiv)', () => {
+    assert.strictEqual(lookupHoverText('sdiv', 'cm0'), null);
+  });
+
+  it('CM0 returns null for CM3-only instruction (cbz)', () => {
+    assert.strictEqual(lookupHoverText('cbz', 'cm0'), null);
+  });
+
+  // ── CM3 arch ─────────────────────────────────────────────────────────────────
+
+  it('CM3 returns hover for a CM3 instruction (sdiv)', () => {
+    const result = lookupHoverText('sdiv', 'cm3');
+    assert.ok(result !== null, 'expected non-null for sdiv on cm3');
+    assert.ok(result!.includes('sdiv'));
+  });
+
+  it('CM3 returns hover for a base instruction (push)', () => {
+    const result = lookupHoverText('push', 'cm3');
+    assert.ok(result !== null, 'expected non-null for push on cm3');
+  });
+
+  it('CM3 returns null for a VFP instruction (vmov)', () => {
+    assert.strictEqual(lookupHoverText('vmov', 'cm3'), null);
+  });
+
+  // ── CM4 arch ─────────────────────────────────────────────────────────────────
+
+  it('CM4 returns hover for a VFP instruction (vmov)', () => {
+    const result = lookupHoverText('vmov', 'cm4');
+    assert.ok(result !== null, 'expected non-null for vmov on cm4');
+    assert.ok(result!.includes('vmov'));
+  });
+
+  it('CM4 returns hover for a CM3 instruction (sdiv)', () => {
+    const result = lookupHoverText('sdiv', 'cm4');
+    assert.ok(result !== null, 'expected non-null for sdiv on cm4');
+  });
+
+  it('CM4 returns null for a CM33 TrustZone instruction (sg)', () => {
+    assert.strictEqual(lookupHoverText('sg', 'cm4'), null);
+  });
+
+  // ── CM33 arch ────────────────────────────────────────────────────────────────
+
+  it('CM33 returns hover for TrustZone instruction (sg)', () => {
+    const result = lookupHoverText('sg', 'cm33');
+    assert.ok(result !== null, 'expected non-null for sg on cm33');
+    assert.ok(result!.includes('sg'));
+  });
+
+  it('CM33 returns hover for VFP instruction (vmov)', () => {
+    const result = lookupHoverText('vmov', 'cm33');
+    assert.ok(result !== null, 'expected non-null for vmov on cm33');
   });
 
   // ── Contextual hover with line text ─────────────────────────────────────────

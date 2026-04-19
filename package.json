@@ -17,6 +17,9 @@
   "activationEvents": [
     "onLanguage:gcc-lst",
     "onLanguage:gcc-lst-riscv",
+    "onLanguage:gcc-lst-cm0",
+    "onLanguage:gcc-lst-cm3",
+    "onLanguage:gcc-lst-cm4",
     "onLanguage:gcc-lst-cm33"
   ],
   "main": "./out/extension",
@@ -39,6 +42,24 @@
         ]
       },
       {
+        "id": "gcc-lst-cm0",
+        "aliases": [
+          "GCC Listing (CM0)"
+        ]
+      },
+      {
+        "id": "gcc-lst-cm3",
+        "aliases": [
+          "GCC Listing (CM3)"
+        ]
+      },
+      {
+        "id": "gcc-lst-cm4",
+        "aliases": [
+          "GCC Listing (CM4)"
+        ]
+      },
+      {
         "id": "gcc-lst-cm33",
         "aliases": [
           "GCC Listing (CM33)"
@@ -50,6 +71,21 @@
         "language": "gcc-lst-riscv",
         "scopeName": "source.gcc-lst-riscv",
         "path": "./syntaxes/gcc-lst-riscv.tmLanguage.json"
+      },
+      {
+        "language": "gcc-lst-cm0",
+        "scopeName": "source.gcc-lst-cm33",
+        "path": "./syntaxes/gcc-lst-cm33.tmLanguage.json"
+      },
+      {
+        "language": "gcc-lst-cm3",
+        "scopeName": "source.gcc-lst-cm33",
+        "path": "./syntaxes/gcc-lst-cm33.tmLanguage.json"
+      },
+      {
+        "language": "gcc-lst-cm4",
+        "scopeName": "source.gcc-lst-cm33",
+        "path": "./syntaxes/gcc-lst-cm33.tmLanguage.json"
       },
       {
         "language": "gcc-lst-cm33",
@@ -82,6 +118,11 @@
           },
           "default": [],
           "description": "Map paths in .lst files (e.g. Docker container paths) to host filesystem paths. Entries are tried in order; first match whose resolved path exists on disk is used."
+        },
+        "gccLst.armTarget": {
+          "type": "string",
+          "enum": ["cm0", "cm3", "cm4", "cm33"],
+          "description": "Force a specific ARM Cortex-M target. When set, overrides automatic detection."
         }
       }
     }
